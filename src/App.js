@@ -1,6 +1,8 @@
 import React, { Component }from 'react';
+import { Route, Link } from 'react-router-dom';
 import './App.css';
 import BookShelf from './BookShelf';
+import SearchBooks from './SearchBooks';
 import * as BooksAPI from './BooksAPI';
 
 class BooksApp extends Component {
@@ -27,24 +29,32 @@ class BooksApp extends Component {
   render() {
     return (
       <div className="app">
-        <div className="list-books">
-          <div className="list-books-title">
-            <h1>MyReads</h1>
-          </div>
-          <div className="list-books-content">
-            <div>
-              <BookShelf books={this.bookStatus('currentlyReading')}
-                         title="Currently Reading"
-                         bookOnChange={this.changeBookStatus}/>
-              <BookShelf books={this.bookStatus('wantToRead')}
-                         title="Want To Read"
-                         bookOnChange={this.changeBookStatus}/>
-              <BookShelf books={this.bookStatus('read')}
-                         title="Read"
-                         bookOnChange={this.changeBookStatus}/>
+        <Route exact path="/" render={() => (
+          <div className="list-books">
+            <div className="list-books-title">
+              <h1>MyReads</h1>
+            </div>
+            <div className="list-books-content">
+              <div>
+                <BookShelf books={this.bookStatus('currentlyReading')}
+                           title="Currently Reading"
+                           bookOnChange={this.changeBookStatus}/>
+                <BookShelf books={this.bookStatus('wantToRead')}
+                           title="Want To Read"
+                           bookOnChange={this.changeBookStatus}/>
+                <BookShelf books={this.bookStatus('read')}
+                           title="Read"
+                           bookOnChange={this.changeBookStatus}/>
+              </div>
+            </div>
+            <div className="open-search">
+              <Link to='/search'>Add a book</Link>
             </div>
           </div>
-        </div>
+        )}/>
+        <Route path="/search" render={({ history }) => (
+          <SearchBooks/>
+        )}/>
       </div>
     );
   }
