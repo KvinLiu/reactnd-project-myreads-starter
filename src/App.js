@@ -17,6 +17,11 @@ class BooksApp extends Component {
   bookStatus(status){
     return this.state.books.filter(book => book.shelf === status);
   }
+  refreshBooks(){
+    BooksAPI.getAll().then(books => {
+      this.setState({ books });
+    });
+  }
   changeBookStatus = (book) => {
     this.setState((state) => ({
       books: state.books.map((b) => {
@@ -25,6 +30,8 @@ class BooksApp extends Component {
         return b;
       })
     }));
+    BooksAPI.update(book, book.shelf)
+      .then(console.log("Update Book status successful!"));
   }
   render() {
     return (
@@ -53,7 +60,10 @@ class BooksApp extends Component {
           </div>
         )}/>
         <Route path="/search" render={({ history }) => (
-          <SearchBooks/>
+          <SearchBooks refreshBooks={() => {
+              this.refreshBooks();
+              history.push('/');
+            }}/>
         )}/>
       </div>
     );
