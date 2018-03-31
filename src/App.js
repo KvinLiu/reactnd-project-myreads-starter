@@ -34,6 +34,12 @@ class BooksApp extends Component {
       .then(console.log("Update Book status successful!"));
   }
   render() {
+    const shelves = {
+      currentlyReading: ['Currently Reading', 'currentlyReading'],
+      wantToRead: ['Want to Read', 'wantToRead'],
+      read: ['Read', 'read']
+    };
+
     return (
       <div className="app">
         <Route exact path="/" render={() => (
@@ -43,15 +49,12 @@ class BooksApp extends Component {
             </div>
             <div className="list-books-content">
               <div>
-                <BookShelf books={this.bookStatus('currentlyReading')}
-                           title="Currently Reading"
-                           bookOnChange={this.changeBookStatus}/>
-                <BookShelf books={this.bookStatus('wantToRead')}
-                           title="Want To Read"
-                           bookOnChange={this.changeBookStatus}/>
-                <BookShelf books={this.bookStatus('read')}
-                           title="Read"
-                           bookOnChange={this.changeBookStatus}/>
+                { Object.keys(shelves).map((shelf) =>
+                  <BookShelf key={shelf}
+                    books={this.bookStatus(shelves[shelf][1])}
+                    title={shelves[shelf][0]}
+                    bookOnChange={this.changeBookStatus}/>
+                )}
               </div>
             </div>
             <div className="open-search">
@@ -60,10 +63,12 @@ class BooksApp extends Component {
           </div>
         )}/>
         <Route path="/search" render={({ history }) => (
-          <SearchBooks refreshBooks={() => {
+          <SearchBooks
+            refreshBooks={() => {
               this.refreshBooks();
               history.push('/');
-            }}/>
+            }}
+            existBooks={this.state.books}/>
         )}/>
       </div>
     );
