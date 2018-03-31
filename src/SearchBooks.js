@@ -13,7 +13,7 @@ class SearchBooks extends Component {
       this.setState({ books });
     });
   }
-  Addbook(book) {
+  addBook(book) {
     BooksAPI.update(book, book.shelf)
       .catch("Failed to update book status");
   }
